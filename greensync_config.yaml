@@ -1,0 +1,155 @@
+# GreenSync by Shachar Liberman.  
+# https://github.com/lshachar/GreenSync
+# Published under GNU GPLv3
+# Enjoying GreenSync? please show me your love -  https://paypal.me/lshachar  :)
+
+# Main GreenSync configuration file. Used to configure projects, operations, and users.
+
+
+# _________________________________________________________________________________#
+
+# Include / Exclude list
+
+exclude:
+ - '\System Volume Information\'
+ - '\$Recycle.Bin\'
+ - '\RECYCLE?\'
+ - '\Recovery\'
+ - '*\thumbs.db'
+ - '*\.grabcad\'
+ - '*\.cachecad\'
+ - '*\~$*:'                        # Solidworks temporary files
+ - 'desktop.ini:'
+ - '*.gsheet | *.gdoc | *.gdraw | *.gfile'  # ignore google drive shell-link files, as they cannot be synced with FFS. (These extensions are made up - google drive does not use them by default. read the section about The problem with syncing Google files in readme.md for further information.
+
+
+# Include list (normally: Everything)
+include:
+ - '*'
+
+
+# _________________________________________________________________________________#
+
+# Users: The simplest setup is sharing a single google drive account between all your users, so everyone connects using the same username/password. However multipe users access is also supported, which creates sync operation files for each individual user in a seperate folder.
+
+users:
+ - name: ''             # Put a name here if you're defining sync operations for multiple users, otherwise it's not necessary.
+ # Base Folders (All projects are in subfolders under the base folders):
+   base_local: 'c:\GreenSync'
+   base_remote: 'gdrive:\username@gmail.com\GreenSync'
+   
+
+# defining multiple users: add as many as you like. fill in the essential base folders path.
+# exmaple (uncomment to use):
+
+# - name: '2nd user'       # insert a name here if you are using multiple users definitions. (you might want to fill a name for the 1st user too.)
+#   base_local: 'c:\<specific saved folder for user>'
+#   base_remote: 'gdrive:\<specific user's gmail username>@gmail.com:<path to shared folder, which this 
+#   user should have included as a link in their google drive>    example:    base_remote: 'gdrive:\user1@gmail.com\Work\GreenSync'
+
+
+# _________________________________________________________________________________#
+
+# Projects: A list of projects and their pairs of local+remote folders.
+
+# op_savepath: (operation save path): fill it if you'd like to save your project operations 
+# in a subfolder instead of the default top folder.
+# for instance, you can use: " op_savepath: '\old' " to save some projects operations under the subfolder-
+# 'c:\GreenSync\ZZ GreenSync Operations\old\'
+# You don't have to include the key 'op_savepath' if it's empty - you can remove it to keep the projects list tidy.
+
+# The 1st project in this list is special - it stores all of GreenSync's operations. (for all users, if more than one is defined)
+# it may still be renamed and the local/remote folders may be moved at your conveninece.
+
+# tip: It may be comfortable to store freefilesync's Donation edition portable / install files there, 
+# under a subfolder. ie: c:\GreenSync\ZZ GreenSync Operations\FFS portable\
+
+projects:
+ - name: 'ZZ GreenSync Ops'
+   local: '\ZZ GreenSync Operations'
+   remote: '\ZZ GreenSync Operations'
+
+# Add your own projects configurations here. Examples:
+   
+ - name: 'Testing ground'
+   local: '\Testing ground'
+   remote: '\Testing ground'
+   op_savepath: '\test'
+
+ - name: 'Project A'
+   local: '\Project A - local'
+   remote: '\Project A - remote'
+   op_savepath: '\old'
+   
+ - name: 'Project B'
+   local: '\Project B'
+   remote: '\Project B'
+   op_savepath: '\old'
+
+
+# _________________________________________________________________________________#
+
+# Operations: A list of operations that you'd like to enable and let your users have access to.
+# ('Sync' and 'Force upload' should be treated with care.)
+
+operations:
+ - name: '1 Download'
+   notes: "Download changes from the remote folder to the local folder"
+   left:
+      Create: 'none'
+      Update: 'none'
+      Delete: 'none'
+   right:
+      Create: 'left'
+      Update: 'left'
+      Delete: 'left'
+
+ - name: '2 Upload'
+   notes: "Upload local changes to the remote folder&#x0A;(Deleted local files will be deleted from the server)"
+   left:
+      Create: 'right'
+      Update: 'right'
+      Delete: 'right'
+   right:
+      Create: 'none'
+      Update: 'none'
+      Delete: 'none'
+
+ - name: '3 Sync'
+   notes: "Sync both sides&#x0A;See all changes and figure out what you'd like to do&#x0A;Use with caution!"
+   left:
+      Create: 'right'
+      Update: 'right'
+      Delete: 'right'
+   right:
+      Create: 'left'
+      Update: 'left'
+      Delete: 'left'
+
+ - name: '4 Undo local'
+   notes: "Undo/Revert local changes: overwrites or deletes local changes, so that the local folder will match the remote folder.&#x0A;-a fresh start with the most current remote version of the files"
+   left:
+      Create: 'left'
+      Update: 'left'
+      Delete: 'left'
+   right:
+      Create: 'left'
+      Update: 'left'
+      Delete: 'left'
+
+
+# uncomment if you'd like to make the operation 'Force upload' available. It could be little risky, if used unwisely somebody could overwrite an entire project by accident, by uploading all their local changes.
+# (It's useful when tiding up the remote server. but this is rare, and it's also possible to do that manually in FFS,
+# So there's normally no need to uncomment and enable this as an operation)
+
+
+# - name: "5 Force upload"
+#   notes: "Upload all local changes: overwrites or deletes remote changes, so that the remote folder will match the #local folder.&#x0A;(direct opposite of undo local changes - this undos remote changes.&#x0A;Use with caution.
+#   left:
+#      Create: 'right'
+#      Update: 'right'
+#      Delete: 'right'
+#   right:
+#      Create: 'right'
+#      Update: 'right'
+#      Delete: 'right'

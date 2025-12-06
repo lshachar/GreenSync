@@ -1,0 +1,91 @@
+name: Build and Release Executables (Deprecated)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Enter the version (e.g., v1.0.0)"
+        required: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build executable make_greensync_operations.py
+        run: pyinstaller --onefile make_greensync_operations.py
+        
+      - name: Build executable make_projects_list_from_base_folder.py
+        run: pyinstaller --onefile make_projects_list_from_base_folder.py
+
+      #- name: copy configs
+        #run: shutil.copyfile('greensync_config.yaml', '{0}/greensync_config.yaml'.format(DISTPATH)) 
+        #shutil.copyfile('greensync_template.xml', '{0}/shared_runtime/greensync_template.xml'.format(DISTPATH))
+        
+      - name: Create archive (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          tar -czvf app-archive-${{ matrix.os }}.tar.gz dist/
+        shell: bash
+
+
+      - name: Rename executable
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            mv dist/make_greensync_operations.exe dist/make_greensync_operations-windows.exe
+          elif [[ "$RUNNER_OS" == "Linux" ]]; then
+            mv dist/make_greensync_operations dist/make_greensync_operations-linux
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            mv dist/make_greensync_operations dist/make_greensync_operations-macos
+          fi
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.os }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: List downloaded files (Debugging)
+        run: ls -R
+
+      - name: Make files executable (Linux/Mac)
+        run: chmod +x app-* || true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Release ${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            *
