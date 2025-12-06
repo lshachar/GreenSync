@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FreeFileSync XmlType="GUI" XmlFormat="23">
+    <Notes>{{NOTES}}</Notes>
+    <Compare>
+        <Variant>TimeAndSize</Variant>
+        <Symlinks>Exclude</Symlinks>
+        <IgnoreTimeShift/>
+    </Compare>
+    <Synchronize>
+        <Changes>
+		    <Left Create="{{LEFT_CREATE}}" Update="{{LEFT_UPDATE}}" Delete="{{LEFT_DELETE}}"/>
+			<Right Create="{{RIGHT_CREATE}}" Update="{{RIGHT_UPDATE}}" Delete="{{RIGHT_DELETE}}"/>
+        </Changes>
+        <DeletionPolicy>RecycleBin</DeletionPolicy>
+<!-- RecycleBin, Permanent, or versioning-which requires more settings-use ffs'es GUI to set up versioning.  -->
+        <VersioningFolder Style="Replace"/>
+    </Synchronize>
+    <Filter>
+        <Include>
+			{{INCLUDE_LIST}}
+        </Include>
+        <Exclude>
+			{{EXCLUDE_LIST}}		
+        </Exclude>
+        <SizeMin Unit="None">0</SizeMin>
+        <SizeMax Unit="None">0</SizeMax>
+        <TimeSpan Type="None">0</TimeSpan>
+    </Filter>
+    <FolderPairs>
+        <Pair>
+            <Left Threads="50">{{BASE_LOCAL}}{{PROJECT_LOCAL}}</Left>     
+            <Right Threads="50">{{BASE_REMOTE}}{{PROJECT_REMOTE}}</Right>
+<!-- (Left/Right) threads count can affect performance. You can try different values for optimizing your setup https://freefilesync.org/manual.php?topic=performance -->
+        </Pair>
+    </FolderPairs>
+    <Errors Ignore="true" Retry="0" Delay="5"/> 
+	<!-- ignore="true" since you can see the error logs when sync operation is finished -->
+    <PostSyncCommand Condition="Completion"/>
+    <LogFolder/>
+    <EmailNotification Condition="Always"/>
+    <GridViewType>Action</GridViewType>
+</FreeFileSync>

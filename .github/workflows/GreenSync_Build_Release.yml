@@ -1,0 +1,105 @@
+name: GreenSync-Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Enter the version (e.g., v1.0.0)"
+        required: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run:
+          pip install -r requirements.txt
+
+      - name: Build executables
+        run: |
+          pyinstaller --onefile make_greensync_operations.py
+          pyinstaller --onefile make_projects_list_from_base_folder.py
+
+      - name: Prepare release folder
+        run: |
+          mkdir GreenSync
+          cp dist/* GreenSync/
+          cp greensync_config.yaml GreenSync/
+          cp greensync_template.xml GreenSync/
+          cp readme.md GreenSync/
+        shell: bash
+
+      - name: Archive artifacts (windows-latest)
+        if: matrix.os == 'windows-latest'
+        run: |
+          Compress-Archive -Path GreenSync\ -DestinationPath GreenSync_${{ github.event.inputs.version }}_${{ runner.os }}.zip
+        shell: powershell
+
+      - name: Make files executable (Linux/Mac)
+        if: matrix.os != 'windows-latest'
+        run: |
+          chmod +x make_* || true
+        shell: bash
+
+      - name: Archive artifacts (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          tar -czvf GreenSync_${{ github.event.inputs.version }}_${{ runner.os }}.tar.gz GreenSync
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GreenSync_${{ github.event.inputs.version }}_${{ runner.os }}
+          path: |
+            GreenSync_${{ github.event.inputs.version }}_${{ runner.os }}.*
+            
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: List downloaded files (Debugging)
+        run: ls -R
+        
+#     - name: Make files executable (Linux/Mac)
+#       run: chmod +x app-* || true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Release ${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            *
+#           GreenSync_<VER>_Windows.tar.gz
+#           GreenSync_<VER>_Linux.tar.gz            
+#           GreenSync_<VER>_macOS.tar.gz
