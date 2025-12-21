@@ -35,7 +35,7 @@ include:
 users:
  - name: ''             # Put a name here if you're defining sync operations for multiple users, otherwise it's not necessary.
  # Base Folders (All projects are in subfolders under the base folders):
-   base_local: 'c:\GreenSync'
+   base_local: 'C:\GreenSync'
    base_remote: 'gdrive:\username@gmail.com\GreenSync'
    
 
@@ -43,7 +43,7 @@ users:
 # exmaple (uncomment to use):
 
 # - name: '2nd user'       # insert a name here if you are using multiple users definitions. (you might want to fill a name for the 1st user too.)
-#   base_local: 'c:\<specific saved folder for user>'
+#   base_local: 'C:\<specific saved folder for user>'
 #   base_remote: 'gdrive:\<specific user's gmail username>@gmail.com:<path to shared folder, which this 
 #   user should have included as a link in their google drive>    example:    base_remote: 'gdrive:\user1@gmail.com\Work\GreenSync'
 
@@ -55,14 +55,15 @@ users:
 # op_savepath: (operation save path): fill it if you'd like to save your project operations 
 # in a subfolder instead of the default top folder.
 # for instance, you can use: " op_savepath: '\old' " to save some projects operations under the subfolder-
-# 'c:\GreenSync\ZZ GreenSync Operations\old\'
+# 'C:\GreenSync\ZZ GreenSync Operations\old\'
 # You don't have to include the key 'op_savepath' if it's empty - you can remove it to keep the projects list tidy.
 
 # The 1st project in this list is special - it stores all of GreenSync's operations. (for all users, if more than one is defined)
 # it may still be renamed and the local/remote folders may be moved at your conveninece.
 
 # tip: It may be comfortable to store freefilesync's Donation edition portable / install files there, 
-# under a subfolder. ie: c:\GreenSync\ZZ GreenSync Operations\FFS portable\
+# under a subfolder. ie: C:\GreenSync\ZZ GreenSync Operations\Setup\FFS\
+
 
 projects:
  - name: 'ZZ GreenSync Ops'
