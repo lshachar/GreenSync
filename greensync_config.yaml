@@ -6,7 +6,7 @@
 # Main GreenSync configuration file. Used to configure projects, operations, and users.
 
 
-# _________________________________________________________________________________#
+#################################################################
 
 # Include / Exclude list
 
@@ -27,54 +27,49 @@ exclude:
 include:
  - '*'
 
+#################################################################
 
-# _________________________________________________________________________________#
-
-# Users: The simplest setup is sharing a single google drive account between all your users, so everyone connects using the same username/password. However multipe users access is also supported, which creates sync operation files for each individual user in a seperate folder.
+# Users: The simplest setup is sharing a single google drive account between all your users, so everyone connects using the same username/password. However, multipe users access is also supported, which creates individual sync operation files for every user, contained in a seperate folder (named by the user name).
 
 users:
- - name: ''             # Put a name here if you're defining sync operations for multiple users, otherwise it's not necessary.
- # Base Folders (All projects are in subfolders under the base folders):
-   base_local: 'c:\GreenSync'
-   base_remote: 'gdrive:\username@gmail.com\GreenSync'
+ - name: ''                  # Insert a name if you're defining multiple users. Otherwise can be left blank.
+   base_local: 'C:\GreenSync'                                   # Path to user's local copy of project files 
+   base_remote: 'gdrive:\username@gmail.com\GreenSync'          # Path to user's remote copy of project files
    
 
-# defining multiple users: add as many as you like. fill in the essential base folders path.
+# Multiple Users access
+# see https://github.com/lshachar/GreenSync/?tab=readme-ov-file#access-from-multiple-google-user-accounts
 # exmaple (uncomment to use):
 
-# - name: '2nd user'       # insert a name here if you are using multiple users definitions. (you might want to fill a name for the 1st user too.)
-#   base_local: 'c:\<specific saved folder for user>'
-#   base_remote: 'gdrive:\<specific user's gmail username>@gmail.com:<path to shared folder, which this 
-#   user should have included as a link in their google drive>    example:    base_remote: 'gdrive:\user1@gmail.com\Work\GreenSync'
+# - name: '2nd user'                                             # You might now want to name the 1st user, too
+#   base_local: 'C:\GreenSync'                                   # Path to user's local copy of project files 
+#   base_remote: 'gdrive:\2nd.user@gmail.com\GreenSync'          # Path to user's remote copy of project files
 
-
-# _________________________________________________________________________________#
+#################################################################
 
 # Projects: A list of projects and their pairs of local+remote folders.
 
-# op_savepath: (operation save path): fill it if you'd like to save your project operations 
+# op_savepath: (operation save path): fill this key if you'd like to save your project operations 
 # in a subfolder instead of the default top folder.
 # for instance, you can use: " op_savepath: '\old' " to save some projects operations under the subfolder-
-# 'c:\GreenSync\ZZ GreenSync Operations\old\'
+# 'C:\GreenSync\ZZ GreenSync Operations\old\'
 # You don't have to include the key 'op_savepath' if it's empty - you can remove it to keep the projects list tidy.
 
-# The 1st project in this list is special - it stores all of GreenSync's operations. (for all users, if more than one is defined)
-# it may still be renamed and the local/remote folders may be moved at your conveninece.
-
-# tip: It may be comfortable to store freefilesync's Donation edition portable / install files there, 
-# under a subfolder. ie: c:\GreenSync\ZZ GreenSync Operations\FFS portable\
+# The 1st project in this list is special - it stores all of GreenSync's operations.
+# (It may be renamed, at your conveninece.)
+# Hint: Keep freefilesync's Donation edition Install files under 'C:\GreenSync\ZZ GreenSync Operations\Setup\FFS Setup\'
+# - Makes setting up new computers very easy.
 
 projects:
  - name: 'ZZ GreenSync Ops'
    local: '\ZZ GreenSync Operations'
    remote: '\ZZ GreenSync Operations'
-
-# Add your own projects configurations here. Examples:
    
  - name: 'Testing ground'
    local: '\Testing ground'
    remote: '\Testing ground'
-   op_savepath: '\test'
+
+# add your own projects configurations here
 
  - name: 'Project A'
    local: '\Project A - local'
@@ -87,7 +82,7 @@ projects:
    op_savepath: '\old'
 
 
-# _________________________________________________________________________________#
+#################################################################
 
 # Operations: A list of operations that you'd like to enable and let your users have access to.
 # ('Sync' and 'Force upload' should be treated with care.)

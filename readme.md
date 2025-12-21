@@ -8,18 +8,35 @@ GreenSync is a practical solution made from a couple of lightweight Python scrip
 Setup is simple and designed to be shared across team members for a smooth, unified experience. a single person can configure GreenSync for an entire team, and everyone else can immediately collaborate using the same configurations.
 
 GreenSync supports all the essential and intuitive operations needed for collaborative work: **Upload, Download, Undo Local Changes**—so you can update your project files quickly, confidently, and get back to work faster.
-3
 
- [<img width="100" alt="Watch the video tutorials on YouTube" src="https://github.com/user-attachments/assets/61b3791e-214e-454b-8a06-6b17c4300d6a" >](https://www.youtube.com/playlist?list=PLB7_MxikWTNoCSxZbEPRPo8c0aFSEUMVV)   **Click to watch the video tutorials on YouTube**
+Greensync was made in cooperation with robotics team [#4590 GreenBlitz](https://www.facebook.com/GreenBlitz4590/) from Israel. [<img width="150" alt="Greenblitz" src="https://github.com/user-attachments/assets/0fed0fb4-fe5b-46b6-9a1c-cc7dbfa214c5" >](https://www.facebook.com/GreenBlitz4590/)
 
 ---
 
 * GreenSync will work with Cad files... **or any other type of file**. It should be useful for many collaborative projects where file synchronization is needed.
-* FreeFileSync is available for Windows, macOS and Linux.
-* GreenSync's python scripts are precompiled for the same operation systems, get them from the [release page](https://github.com/lshachar/GreenSync/releases) (or install Python and run the scripts directly)
+* FreeFileSync is available for Windows, macOS and Linux, 
+* GreenSync's python scripts are precompiled for the same operation systems, get them from the [release page](https://github.com/lshachar/GreenSync/releases) (or install Python and run the scripts directly).
+* If you're running Linux / macOS, you should change windows style backslashes `\` into forward slashes `/` in `greensync_config.yaml`.
 * Remote syncing destinations options: Google drive, a local folder / network folder, or a folder on an FTP server.
 * Multiple configuration files could be saved and used individually for different projects, users, and remote syncing destinations.
 * Published under GNU GPLv3
+
+---
+
+[<img width="100" alt="Watch the video tutorials on YouTube" src="https://github.com/user-attachments/assets/61b3791e-214e-454b-8a06-6b17c4300d6a" >](https://www.youtube.com/playlist?list=PLB7_MxikWTNoCSxZbEPRPo8c0aFSEUMVV)   **Click to watch the video tutorials on YouTube**
+
+---
+
+## [A Quick How To Use GreenSync Guide](https://github.com/lshachar/GreenSync/blob/master/readme/How%20To%20Use%20GreenSync.md)
+A step-by-step guide. Best to start here. In only a few minutes you'll have everything up and running.
+
+---
+
+## [The four default operations explained with images](https://github.com/lshachar/GreenSync/blob/master/readme/Default%20Operations.md)
+
+One case example with only a few changed files. Explains how each possible operation affects how the files will be synchronized.
+
+---
 
 ## Important Note About Google Drive's sync speed using FreeFileSync
 
@@ -44,143 +61,36 @@ If GreenSync helps you or your team, I’d be grateful if you would consider sup
 
 ---
 
+## Why do I have a new sync.ffs_db file in my project folder?
+running synchronization operations stores folder structure databases in `sync.ffs_db` files on both the local and remote folders. They are important for correct FFS behaviour, such as: it's a possiblity that a file got deleted on one side, but it's also a possiblity that a file got created on the other side! In order for FFS to sync them in accordance to your selected operation rule (upload/download/undo changes) FFS must know what was the last state of affairs before the current directory comparison. That's basically what the databases are for. They are good for you. let them be and try your best not to delete them by accident. They are marked as hidden files on your local system by FFS. (so you can hide these files in windows explorer easily)
 
-## How to use
-* There is one important configuration file: `greensync_config.yaml`
-And one configuration file for some less common options: `greensync_template.xml` 
+FreeFileSync's [manual](https://freefilesync.org/manual.php) or [video tutorials here](https://freefilesync.org/tutorials.php)
   
-* There is one important python script: `make_greensync_operations.py` 
-And one supporting python script: `make_projects_list_from_base_folder.py` - which is only useful when setting up a long list of projects.
-
-You don't have to download python or edit scripts, get a precompiled version of the scripts from the [release page](https://github.com/lshachar/GreenSync/releases)
-  
-
-**Start** by editing `greensync_config.yaml`:
-Under base_remote: `gdrive:\username@gmail.com\GreenSync` replace `username` with the relevant gmail username. You may rename the base folder `GreenSync` if needed.
-
-* It's possible to sync to a remote location that's available on the local network / hard drive as well. just change the `base_remote` value accordingly
-
-
-Under `projects`:
-The 1st project in the list is specially reserved to store all of GreenSync's operations. (Default name: `ZZ GreenSync Ops`. It is prefixed with ZZ to appear last in the list of projects in FFS)
-
-The next three projects in the default `greensync_config.yaml` file are just there as examples. (`Testing ground`,`Project A`, `Project B`. remove, rename, or add to them however you'd like.
-
-under `Operations`:
-You may want to uncomment the 5th operation "Force upload". or comment out the 3rd operation "sync", which I don't recommend using regularly - it's more of a comfortable way to see all project changes in one place.
-
-* run `make_greensync_operations`
-
-You may want to run the command from a command prompt (Windows) / terminal window (macOS / Linux) to catch the script's output messages.(run `make_greensync_operations -h` for further help about running the script with arguments)
-
-a FreeFileSync's folder configuration definition is saved in an `.ffs_gui` files. it is quite human-readble .xml file.
-
-The operations are created in `<local base folder> \ <1st project>` which defaults to `c:\GreenSync\ZZ GreenSync Ops\`
-
-* launch FreeFileSync  
-`Configuration` -> `Open...` OR `File` -> `Open`  
-* Go to the 1st project folder on your local drive (default `c:\GreenSync\ZZ GreenSync Ops\`)  
-Select all files in folder, click open.
-  
-This is what you should get:  
-![FFS populated](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20populated.jpg?raw=true)
 
 ---
 
-## Using FreeFileSync with your project operations
-FreeFileSync is very easy to use.[See the manual here](https://freefilesync.org/manual.php) or [video tutorials here](https://freefilesync.org/tutorials.php)
+## Access From Multiple Google User Accounts
 
+* It's easiest to configure GreenSync with a single, shared cridential (Username and Password) that all your collaborators share. However this might not be safe or comfortable enough for your needs. Not to worry! GreenSync can easily be configured to support as many seperate google accounts as needed.
 
-My best word of advice is: don't worry about clicking on anything and generally trying things out in FreeFileSync. 
-*Only thing you should be careful around*: after you click on the synchronize button on the top left (or F9), Don't click *Start* unless you're sure of yourself. clicking start is the only way to actually write files to disk.
+1. Read the `Users` section of `greensync_config.yaml`   
+for each user, 3 lines must be defined in `greensync_config.yaml`:  
+ `- name: '<personal name>'`  
+   `base_local: '<path for local files>'`						(use `C:\GreenSync` for easy configuration)  
+   `base_remote: '<path for remote files on google drive.>`  	(use `gdrive:\username@gmail.com\GreenSync` for easy configuration)  
+   
+2. Watch the [YouTube tutorial](https://youtu.be/EDvjGOFoVD0?si=XoTLtCxlmy97CcZU&t=264) (starting at 4:24), learn how each google user must add a link to the shared google drive project folder - to their own individual google drive, using the web graphical interface.
 
-* You may want to use the project "Testing Ground" as a place for trials and attempts, ie:  
-Create the local folder `c:\GreenSync\Testing Ground\`, copy some files to it, use `Testing ground - 2 Upload.ffs_gui` to upload them to your remote destination, update some of those files directly on the remote destination, delete some files remotely and some locally, connect another computer and FFS to the same remote destination (etc...) - and see how FFS displays the changes its file view in each defined operation.
+3. Once changes are saved in `greensync_config.yaml`, Run the script `make_greensync_operations` to create new synchronization Operations for all defined users.
 
-* Note: When either your local or remote project folders are new folders, you might need to synchronize once before all your changes will show up.  
-  
-* Note that running synchronization operations creates `sync.ffs_db` files on both local and remote folders. They are important for FFS for file-move operations (saving time, instead of deleting and redownloading, FFS will just move files wherever needed) and to keep track which side had deleted a file or created a new file. (just ignore these files.)
-
----
-
-## 5 pictures are worth five thousand words
-
-### Download:
-1 `only local.doc` 	  - file exists on left (local) side only, marked "do nothing"  
-2 `other files.txt`   - right side (remote) is newer - will be downloaded to local  
-3 `remote video.mp4`  - file exists on right (remote) side only - will be downloaded  
-4 `some files.txt`    - local file is newer, do nothing.  
-![FFS testing ground - 1 download.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20testing%20ground%20-%201%20download.jpg?raw=true)
-  
-### Upload:
-1 `only local.doc` 	  - copy new file to remote  
-2 `other files.txt`   - server (remote) is newer, do nothing  
-3 `remote video.mp4`  - exist on remote server only, do nothing  
-4 `some files.txt`    - copy more recent file to remote server.  
-![FFS testing ground - 2 upload.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20testing%20ground%20-%202%20upload.jpg?raw=true)
-
-### Sync:
-Note: confusing when there are lots of changes both remote and local. it's advised to **upload** your work first, then **download** all other changes that are on the remote server. use Sync to **view** all current changes, not necessarily to sync them.  
-  
-1 `only local.doc` 	  - copy new file to remote  
-2 `other files.txt`   - right side (remote) is newer - will be downloaded to local  
-3 `remote video.mp4`  - file exists on right (remote) side only - will be downloaded  
-4 `some files.txt`    - copy more recent file to remote server.  
-![FFS testing ground - 3 sync.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20testing%20ground%20-%203%20sync.jpg?raw=true)
-
-### Undo local changes:
-Note: Will change only local files, to revert all local changes, restoring to the same state as the remote server.  
-1 `only local.doc` 	  - **deletes local file, since it's only saved locally**  
-2 `other files.txt`   - right side (remote) is newer - will be downloaded to local  
-3 `remote video.mp4`  - file exists on right (remote) side only - will be downloaded  
-4 `some files.txt`    - **removes local changes in left side even though it's newer**  
-![FFS testing ground - undo local.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20testing%20ground%20-%20undo%20local.jpg?raw=true)
-
-### Force upload:
-Note: This operation is disabled by default (in `greensync_config.yaml`), since it could be little risky: If used unwisely somebody could overwrite an entire project by accident, by uploading all their local changes. Also, it is possible to manually achieve this behaviour in FFS.
-# (It's useful when tiding up the remote server.)
-
-by clicking in the two marked areas, you change the synchronization behavior in the 2nd and 3rd file from do nothing - to upload (compare this to the sync screenshot).
-Hence you don't really have to use the commented-out operation "Force upload", because you can manually override remote changes if you need to.
-
-1 `only local.doc` 	  - upload. copy new file to remote.  
-2 `other files.txt`   - **upload - Revert changes on the remote side**  
-3 `remote video.mp4`  - **delete file on server side - Revert remote the same state as local**  
-4 `some files.txt`    - upload, copy more recent file to remote server  
-![FFS testing ground - undo local.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20testing%20ground%20-%20undo%20local.jpg?raw=true)
+It's very easy to set up once you've played and experimented with GreenSync a little bit.
 
 
 ---
 
-## Sharing your projects with other users
-* **One time only**: from FFS click the configuration `ZZ GreenSync Ops - 2 Upload`, and upload the created .ffs_gui files to your remote server/folder. (This needs to be done once when the sync operations are updated, normally after the script make_greensync_operations is run with new settings, to update the remote side's sync operations, which are  shared and used by all users)
+## Advanced stuff that you probably would never use: Changing more of FreeFileSync's configurations through greensync_template.xml
 
-![FFS upload greensync ops.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20upload%20greensync%20ops.jpg?raw=true)
-
-
-* copy and install FFS on to the new machine.  
-* Copy the file `ZZ GreenSync Ops - 1 Download.ffs_gui` on to the new machine.  
-  
-*tip: if you're using google drive as the remote server, you might like to share a link to this google drive file by email.  
-
-* Start FFS, load the copied configuration file, and download all the Operation files that are on the remote server.  
-![FFS download greensync ops.jpg](https://github.com/lshachar/GreenSync/blob/master/readme/FFS%20download%20greensync%20ops.jpg?raw=true)
-
-*Done!* You can now start working!
-
----
-
-## Multiple Google Drive users? 
-
-* It's easiest to use GreenSync with the same Google drive username for all of your users.
-However, if you'd like to be able to see which user uploaded the current version of a file (viewed in google drive web interface) you may want to share your remote folder with seperate google users.  
-Then you'd also need to create seperate synchronization operation files for each user.  
-please run the script `make_greensync_operations -h` (with the argument `-h`) in order to learn about argument usage with the script. You will create and use several copies of `greensync_config.yaml` (and / or `greensync_template.xml`) to automate the creation of multiple project operation files, each defined for a seperate user.  
-
----
-
-## Changing more of FreeFileSync's configurations through greensync_template.xml
-
+Try this:
 * in FFS, Select any operation from the list of configurations (open any file from `C:\GreenSync\ZZ GreenSync Operations`)
 * Enter the syncrhonization settings menu by clicking F8 / clicking the blue gear -> synchronization
 * Under Delete and overwrite, click Permanent
@@ -192,7 +102,7 @@ please run the script `make_greensync_operations -h` (with the argument `-h`) in
 * In the temporary file you will find at the same line: `<DeletionPolicy>Permanent</DeletionPolicy>`
 * If you'd like files to be permanently deleted, instead of sent to the recycle bin, edit the file `greensync_template.xml` and add change the deletionPolicy to Permanent.
 
-* You can find out what each setting in `greensync_template.xml` does by the same process.
+* You can find out what each XML setting in `greensync_template.xml` does by the same process. and fine tune it to your needs.
 
 ---
 

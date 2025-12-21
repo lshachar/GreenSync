@@ -45,6 +45,7 @@ jobs:
           cp greensync_config.yaml GreenSync/
           cp greensync_template.xml GreenSync/
           cp readme.md GreenSync/
+          cp LICENSE.txt GreenSync/
         shell: bash
 
       - name: Archive artifacts (windows-latest)
